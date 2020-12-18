@@ -56,7 +56,7 @@ router.post('/' , [
 
        jwt.sign(payload , process.env.JWT_SECRET , {expiresIn : process.env.EXP} ,(err , token)=>{
            if(err) throw err;
-           console.log(token);
+          console.log(token)
        }  );
         
         res.send('user registered')
@@ -67,5 +67,7 @@ router.post('/' , [
     }
 
 } )
+
+
 
 module.exports = router
