@@ -1,6 +1,8 @@
+const { response } = require('express');
 const express = require('express');
 const { check , validationResult } = require('express-validator');
-
+const axios = require('axios')
+const request = require('request')
 const router = express.Router();
 const auth = require('./../../middlewares/auth')
 const Profile = require('./../../models/profileModel')
@@ -111,7 +113,7 @@ router.get('/user/:user_id' ,async (req, res)=>{
         if(!profile) return res.status(400).json({msg : 'Profile not found'})
         res.json({profile})
     } catch (err) {
-        if(err.name == 'CastError'){
+        if(err.name === 'CastError'){
             return res.status(400).json({msg : 'Profile not found'})
         }
         res.status(500).json({msg : 'internla server errro'})
@@ -278,6 +280,35 @@ router.delete('/education/:edu_id' ,auth ,async ( req, res )=>{
 
 
 } )
+
+
+// @route    GET api/profile/github/:username
+// @desc     Get user repos from Github
+// @access   Public
+router.get('/github/:username', (req, res) => {
+    try {
+        const options = {
+            uri: `https://api.github.com/users/${
+                req.params.username
+            }/repos?per_page=5&sort=created:asc&client_id=${process.env.GET_C_ID}&client_secret=${process.env.GET_C_SEC}`,
+            method: 'GET',
+            headers: { 'user-agent': 'node.js' },
+        };
+
+        request(options, (error, response, body) => {
+            if (error) console.error(error);
+
+            if (response.statusCode !== 200) {
+                return res.status(404).json({ msg: 'No Github profile found' });
+            }
+
+            res.json(JSON.parse(body));
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
 
 
 module.exports = router

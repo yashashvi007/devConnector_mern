@@ -13,6 +13,7 @@ const connectDb = require('./config/db')
 const user = require('./api/routes/user')
 const auth = require('./api/routes/auth')
 const profile = require('./api/routes/profile')
+const post = require('./api/routes/posts')
 
 //connecting to database 
 connectDb();
@@ -23,6 +24,7 @@ app.use(express.json({ extended: false }));
 app.use('/api/users' , user );
 app.use('/api/auth' , auth)
 app.use('/api/profile' , profile)
+app.use('/api/post' , post)
 
 const PORT = process.env.PORT || 5000;
 
