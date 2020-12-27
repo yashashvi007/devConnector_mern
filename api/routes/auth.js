@@ -12,11 +12,13 @@ const jwt = require('jsonwebtoken')
 router.get('/' ,auth ,async (req, res)=>{
    try {
        const user = await User.findById(req.user.id).select('-password');
-       res.json({user});
+       res.json(user);
    } catch (err) {
        res.status(500).send('Server Error');
    }
 } )
+
+
 
 //authenticate user and get token 
 // login
@@ -56,10 +58,9 @@ router.post('/' , [
 
    } catch (err) {
        console.log(err.message);
+       res.status(500).json({'msg' : 'internal server'})
    }
 } )
 
 
-
-
-module.exports = router
+module.exports = router;

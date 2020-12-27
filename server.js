@@ -2,6 +2,7 @@ const express = require('express')
 
 const dotenv = require('dotenv')
 const app = express();
+// const cors = require('cors')
 
 dotenv.config({path : './config/config.env'})
 
@@ -19,7 +20,9 @@ const post = require('./api/routes/posts')
 connectDb();
 
 //body-parser
+// app.use(cors())
 app.use(express.json({ extended: false }));
+
 
 app.use('/api/users' , user );
 app.use('/api/auth' , auth)

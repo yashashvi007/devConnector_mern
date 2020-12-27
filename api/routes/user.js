@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken')
 const User = require('./../../models/userModel');
 
 
+
 // signUp 
 
 router.post('/' , [
@@ -56,7 +57,7 @@ router.post('/' , [
 
         const token = await jwt.sign(payload , process.env.JWT_SECRET , {expiresIn : process.env.EXP} );
         return res.json({token})
-        res.send('user registered')
+       
 
     } catch (err) {
         console.error(err.message);
@@ -64,6 +65,9 @@ router.post('/' , [
     }
 
 } )
+
+
+
 
 
 

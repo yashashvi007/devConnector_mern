@@ -11,6 +11,9 @@ const User = require('./../../models/userModel')
 
 // Get current users profile 
 // private
+// @route    GET api/profile/me
+// @desc     Get current users profile
+// @access   Private
 router.get('/me' , auth ,async (req, res)=>{
     try {
         const profile = await Profile.findOne({user : req.user.id}).populate('user' , ['name' , 'avatar'] )
@@ -18,11 +21,15 @@ router.get('/me' , auth ,async (req, res)=>{
         if(!profile){
             return res.status(400).json({msg : 'There is no prfile for this user'})
         }
+
+        res.json(profile)
     } catch (err) {
         console.log(err.message);
         res.status(500).send('server error')
     }
 } )
+
+
 
 // Create logged in user profile  and update it
 router.post('/' , [auth , [
@@ -86,7 +93,7 @@ router.post('/' , [auth , [
           profile = new Profile(profileFieds)
           await profile.save()
 
-          res.json({profile})
+          res.json(profile)
       } catch (err) {
         res.status(500).json({msg : 'internla server errro'})
       }
@@ -101,7 +108,7 @@ router.get('/' ,async (req, res)=>{
        const profiles = await Profile.find().populate('user' , ['name' , 'avatar' ] )
        res.json({profiles})
    } catch (err) {
-       res.status(500).json({msg : 'internla server errro'})
+       res.status(500).json({msg : 'internla server error'})
    }
 } )
 
@@ -111,12 +118,12 @@ router.get('/user/:user_id' ,async (req, res)=>{
     try {
         const profile = await Profile.findOne({user : req.params.user_id}).populate('user' , ['name' , 'avatar' ])
         if(!profile) return res.status(400).json({msg : 'Profile not found'})
-        res.json({profile})
+        res.json(profile)
     } catch (err) {
         if(err.name === 'CastError'){
             return res.status(400).json({msg : 'Profile not found'})
         }
-        res.status(500).json({msg : 'internla server errro'})
+        res.status(500).json({msg : 'internla server error'})
     }
 } )
 
@@ -132,7 +139,7 @@ router.delete('/' , auth , async (req , res)=>{
 
         res.json({msg : 'User removed'});
     } catch (err) {
-        res.status(500).json({msg : 'internla server errro'})
+        res.status(500).json({msg : 'internla server error'})
     }
 } )
 
@@ -175,9 +182,9 @@ router.put('/experience' ,[auth , [
 
           await profile.save();
 
-          res.json({profile})
+          res.json(profile)
       } catch (err) {
-        res.status(500).json({msg : 'internla server errro'})
+        res.status(500).json({msg : 'internla server error'})
       }
 })
 
@@ -189,16 +196,17 @@ router.delete('/experience/:exp_id' ,auth ,async ( req, res )=>{
     try {
         const profile = await Profile.findOne({user : req.user.id});
 
-    const removeIndex =  profile.experience.map(item => item.id).indexOf(req.params.exp_id);
+    const removeIndex =  profile.experience.map(item => item.id).indexOf(req.params.exp_id);//indexOf return index of the matched id
 
-    profile.experience.splice(removeIndex , 1 );
+
+    profile.experience.splice(removeIndex , 1 );// splice removes the elemet at index given and goes on ahead deleting  number of times specified
 
     await profile.save();
 
-    res.json({profile})
+    res.json(profile)
         
     } catch (err) {
-        res.status(500).json({msg : 'internla server errro'})
+        res.status(500).json({msg : 'internal server error'})
     }
 
 
@@ -272,7 +280,7 @@ router.delete('/education/:edu_id' ,auth ,async ( req, res )=>{
 
     await profile.save();
 
-    res.json({profile})
+    res.json(profile)
         
     } catch (err) {
         res.status(500).json({msg : 'internla server errro'})

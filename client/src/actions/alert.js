@@ -1,3 +1,4 @@
+
 import uuid from 'react-uuid';
 import {SET_ALERT , REMOVE_ALERT} from './type'
 
@@ -9,5 +10,7 @@ export const setAlert = (msg , alertType)=>dispatch=>{
        payload : {msg ,alertType , id}
    })
 
-   setTimeout(()=>dispatch({type : REMOVE_ALERT , payload :id}) , 2000)
+   setTimeout(()=>dispatch({type : REMOVE_ALERT , payload :id}) , 5000)
 }
+
+
