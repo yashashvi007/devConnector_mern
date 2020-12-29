@@ -106,7 +106,7 @@ router.post('/' , [auth , [
 router.get('/' ,async (req, res)=>{
    try {
        const profiles = await Profile.find().populate('user' , ['name' , 'avatar' ] )
-       res.json({profiles})
+       res.json(profiles)
    } catch (err) {
        res.status(500).json({msg : 'internla server error'})
    }
